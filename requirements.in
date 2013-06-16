@@ -1,0 +1,7 @@
+autobahn
+flask
+psycopg2
+sqlalchemy
+twisted
+twistr
+txpostgres

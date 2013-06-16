@@ -1,0 +1,34 @@
+# this file generated from 'requirements.in' by pundler:
+# requirement 'autobahn' depends on:
+zope.interface==4.0.5
+twisted==13.0.0
+setuptools==0.6c11
+autobahn==0.5.14
+
+# requirement 'flask' depends on:
+jinja2==2.7
+markupsafe==0.18
+itsdangerous==0.21
+werkzeug==0.9.1
+flask==0.10.1
+
+# requirement 'psycopg2' depends on:
+psycopg2==2.5
+
+# requirement 'sqlalchemy' depends on:
+sqlalchemy==0.8.1
+
+# requirement 'twisted' depends on:
+#twisted==13.0.0
+#setuptools==0.6c11
+#zope.interface==4.0.5
+
+# requirement 'twistr' depends on:
+#twisted==13.0.0
+twistr==1.0.0
+#zope.interface==4.0.5
+#setuptools==0.6c11
+
+# requirement 'txpostgres' depends on:
+txpostgres==1.1.0
+

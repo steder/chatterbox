@@ -1,0 +1,51 @@
+div.structure {
+    float: left;
+}
+
+div#left {
+    width: 0%;
+}
+
+div#center {
+    width: 100%;
+}
+
+div#right {
+    width: 0%;
+}
+
+div#main_chat_pane {
+    width: 80%;
+}
+
+div#user_list_pane {
+    width: 10%;
+}
+
+div.clear {
+    clear: both;
+}
+
+div.scroll {
+    /* overflow: auto; */
+    overflow-y: scroll;
+    height: 200px;
+    width: 100%;
+}
+
+div#messages {
+    border: 1px solid black;
+    line-height: 25%;
+}
+
+div#user_list_container {
+    border: 1px solid blue;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+ul#userlist {
+    list-style-type: none;
+}
