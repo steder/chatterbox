@@ -1,12 +1,19 @@
 import json
 import random
 import sys
+import uuid
 
+from autobahn.resource import (WebSocketResource,
+                               WSGIRootResource,
+                               HTTPChannelHixie76Aware)
 from autobahn.websocket import WebSocketServerFactory
 from autobahn.websocket import WebSocketServerProtocol
 from autobahn.websocket import listenWS
+from flask import Flask, render_template
 from twisted.internet import reactor
 from twisted.python import log
+from twisted.web.server import Site
+from twisted.web.wsgi import WSGIResource
 
 
 MESSAGE_TYPE_CHAT = 1
@@ -15,6 +22,21 @@ MESSAGE_TYPE_PART = 3
 MESSAGE_TYPE_USERLIST = 4
 
 
+# Configuration
+debug = True
+
+
+# Our Frontend:
+app = Flask(__name__)
+app.secret_key = str(uuid.uuid4())
+app.debug = debug
+
+@app.route('/')
+def page_home():
+    return render_template('chat.html')
+
+
+# Our websockets backend:
 class BroadcastServerProtocol(WebSocketServerProtocol):
     def onOpen(self):
         self.factory.register(self)
@@ -44,12 +66,12 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
                 if message.startswith("/d6"):
                     response = json.dumps({"nickname": "DM",
                                            "ip": self.peerstr,
-                                           "message": "%s rolled a d6 and got %s"%(data["nickname"], random.randint(1, 6))})
+                                           "message": "%s rolled a d6 and got %s" % (data["nickname"], random.randint(1, 6))})
                     self.factory.broadcast(response)
                 elif message.startswith("/"):
                     response = json.dumps({"nickname": "Computer",
                                            "ip": self.peerstr,
-                                           "message": "I don't understand your command: %s"%(message,),
+                                           "message": "I don't understand your command: %s" % (message,),
                                            })
                     self.sendMessage(response)
                 else:
@@ -101,6 +123,18 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
 if __name__ == '__main__':
     log.startLogging(sys.stdout)
-    factory = BroadcastServerFactory("ws://localhost:9000")
-    listenWS(factory)
+    wsFactory = BroadcastServerFactory("ws://localhost:9000")
+
+    # needed if Hixie76 is to be supported
+    wsFactory.setProtocolOptions(allowHixie76=True)
+    wsResource = WebSocketResource(wsFactory)
+
+    wsgiResource = WSGIResource(reactor, reactor.getThreadPool(), app)
+    rootResource = WSGIRootResource(wsgiResource, {'ws': wsResource})
+    site = Site(rootResource)
+
+    # needed if Hixie76 is to be supported
+    site.protocol = HTTPChannelHixie76Aware
+
+    reactor.listenTCP(9000, site)
     reactor.run()

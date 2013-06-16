@@ -18,6 +18,7 @@ function handle_chat(response) {
     messages.scrollTop = messages.scrollHeight;
 };
 
+
 function handle_join(response) {
 	//
 	console.log("User joined: " + response.nickname);
@@ -69,6 +70,7 @@ function handle_userlist(response) {
         }
     }
 };
+
 
 function handle_part(response) {
     // remove a user from the user list
@@ -125,7 +127,7 @@ function send_message(event) {
 
 function initialize_chat() {
     hide_reconnect_button();
-    var ws_uri = "ws://localhost:9000";
+    var ws_uri = "ws://localhost:9000/ws";
     if ("WebSocket" in window) {
         webSocket = new WebSocket(ws_uri);
     }
